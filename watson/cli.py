@@ -247,8 +247,10 @@ def cancel(watson):
               help="only show tags")
 @click.option('-e', '--elapsed', is_flag=True,
               help="only show time elapsed")
+@click.option('-c', '--compact', is_flag=True,
+              help="show compact output")
 @click.pass_obj
-def status(watson, project, tags, elapsed):
+def status(watson, project, tags, elapsed, compact):
     """
     Display when the current project was started and the time spent since.
 
@@ -288,6 +290,14 @@ def status(watson, project, tags, elapsed):
 
     if elapsed:
         click.echo(u"{}".format(
+            style('time', current['start'].humanize())
+        ))
+        return
+
+    if compact:
+        click.echo("{}{} {} ".format(
+            style('project', current['project']),
+            ( " " if current['tags'] else "") + style('tags', current['tags']),
             style('time', current['start'].humanize())
         ))
         return
